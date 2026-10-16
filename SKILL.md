@@ -36,8 +36,6 @@ The Premiere half runs through the `premiere-pro` MCP server (see `INSTALL.md`).
 - **Clips shot one after another (one phone, no recorder):** no sync — lay them end to end in recording order (check `creation_time`).
   The phone's own audio is the only audio: keep it enabled.
 - **Noisy room audio:** phrase detection uses `max(speech level − 30 dB, noise floor + 8 dB)`, so a fan or a phone mic does not glue everything into one phrase.
-- **Private screens:** when the footage shows an email address, an inbox, codes or any personal data, do not cut it if it is part of the
-  explanation — drop a marker on it in Rough Cut and Tight (name `PRIVATE - blur`, or the user's language) and list it in the report.
 - ExtendScript `File.write` ends lines with CR on macOS; Python's `splitlines()` reads it fine — set `f.lineFeed = 'Unix'` for clean files.
 
 ## Step 1 · Organise
