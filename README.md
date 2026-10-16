@@ -16,6 +16,10 @@ You open Premiere and start editing — or pick which of the three you continue 
 ## Before you start
 You need a **paid Claude plan** (Pro or Max, or an Anthropic API account): `/prep` runs inside **Claude Code**, which is not on the free plan.
 
+## Works with
+**Premiere Pro** (through the `premiere-pro` MCP) or **DaVinci Resolve** (through the DaVinci Resolve MCP). Same three timelines in both.
+The Resolve route builds each timeline in a single call; it is written but not yet run end to end.
+
 ## What makes it different
 - **It sorts the folder for you.** Every file gets a role (camera, screen recording, mic), and a working structure is created
   next to your originals (`_work/`, `_assets/`, `exports/`) — the originals are never moved or renamed.
@@ -42,6 +46,7 @@ In Claude Code:
 |---|---|
 | `SKILL.md` | the workflow Claude follows, step by step, with every trap already hit |
 | `scripts/` | probe · sync · phrases (transcription) · cutlist · tight / tight_plan · verify_rebuild |
+| `resolve/prep_resolve.py` | the same timelines in DaVinci Resolve (run inside Resolve through its MCP, or from a terminal with Resolve Studio) |
 | `premiere/` | ExtendScript run through the bridge: build a cut from kept ranges, dump a sequence, batch build, fix, markers |
 | `tools/open_bridge_panel.js` | opens the bridge panel when Premiere's Extensions menu is missing |
 
@@ -122,6 +127,10 @@ Claude بيطلب منك إذن قبل كل أمر يشغله، وأنت توا�
 ```
 /prep  /path/to/footage  "اسم الفيديو"
 ```
+
+## يشتغل مع
+**بريمير برو** (عن طريق MCP بريمير) أو **دافنشي ريزولف** (عن طريق MCP دافنشي). نفس التايم لاينات الثلاثة في الاثنين.
+طريقة دافنشي تبني كل تايم لاين بأمر واحد، ومكتوبة كاملة بس ما انجربت للآخر بعد.
 
 ## يشتغل على
 - **ماك:** مجرب بالكامل (Apple Silicon مع Premiere Pro 2026).

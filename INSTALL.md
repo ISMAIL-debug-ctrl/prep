@@ -59,6 +59,16 @@ Register it for Claude Code: copy `mcp.example.json` to `.mcp.json` in the folde
 Restart Premiere, open a project, open `Window > Extensions > MCP Bridge (CEP)` and start it. If the Extensions menu is missing,
 `node tools/open_bridge_panel.js` opens the panel through another panel's debug port.
 
+## DaVinci Resolve (instead of Premiere)
+`/prep` drives Resolve through the community [DaVinci Resolve MCP](https://github.com/samuelgursky/davinci-resolve-mcp)
+(MIT, third-party — read it before installing):
+```bash
+npx davinci-resolve-mcp setup
+```
+- **Resolve Studio:** Preferences > System > General > External scripting using = **Local**.
+- **Free Resolve:** external scripting is a Studio feature; the MCP's README explains its bridge script, run from Workspace > Scripts.
+Open Resolve, then ask Claude: "check that Resolve is connected".
+
 ## Windows notes
 - Paths given to Premiere scripts use forward slashes: `C:/Users/you/Videos/shoot`.
 - `tools/open_bridge_panel.js` uses `%TEMP%\premiere-mcp-bridge` on Windows (or `PREMIERE_TEMP_DIR` if set).

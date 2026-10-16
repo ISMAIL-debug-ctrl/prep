@@ -113,6 +113,23 @@ mkdir -p ~/.premiere-mcp-bridge && printf '{\n  "telemetry": false,\n  "updateCh
 
 **لو قائمة Extensions مختفية عندك:** الأمر `node tools/open_bridge_panel.js` يفتح لوحة الجسر عن طريق لوحة ثانية مفتوحة في بريمير.
 
+## دافنشي ريزولف (بدل بريمير)
+
+الأداة تشتغل داخل دافنشي عن طريق [MCP دافنشي](https://github.com/samuelgursky/davinci-resolve-mcp) من المجتمع (رخصة MIT، طرف ثالث، فاقرأ عنه قبل التثبيت):
+
+</div>
+
+```bash
+npx davinci-resolve-mcp setup
+```
+
+<div dir="rtl">
+
+- **دافنشي ستوديو (المدفوع):** من Preferences > System > General خلّ External scripting using على **Local**.
+- **دافنشي المجاني:** التحكم الخارجي ميزة في ستوديو بس. ملف الشرح حق الـMCP فيه طريقة بديلة بسكربت يشتغل من داخل دافنشي (Workspace > Scripts).
+
+افتح دافنشي وقل لـClaude: "تأكد إن دافنشي متصل".
+
 ## ملاحظات ويندوز
 - المسارات اللي تنعطى لسكربتات بريمير تكون بشرطة للأمام: `C:/Users/you/Videos/shoot`
 - أداة `tools/open_bridge_panel.js` تستخدم على ويندوز المجلد `%TEMP%\premiere-mcp-bridge`، أو `PREMIERE_TEMP_DIR` لو محدده.

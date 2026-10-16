@@ -29,6 +29,16 @@ The Premiere half runs through the `premiere-pro` MCP server (see `INSTALL.md`).
 - The bridge gives up after 45 s while Premiere keeps working. Long jobs are done in batches that resume from where they stopped.
 - No Premiere project open = no panel loaded = no bridge. If the `Window > Extensions` menu is missing, `tools/open_bridge_panel.js`.
 
+## Premiere Pro or DaVinci Resolve
+Ask which editor the user works in if it is not obvious. Steps 1, 3, 4 and the arithmetic of 6 and 7 are the same for both.
+- **Premiere Pro:** the `premiere-pro` MCP and the `premiere/*.jsx` scripts, as written below.
+- **DaVinci Resolve:** the DaVinci Resolve MCP (see INSTALL) runs `resolve/prep_resolve.py` inside Resolve with a CFG dict —
+  or run it from a terminal with Resolve Studio. Its actions replace the Premiere steps:
+  step 2 + the Assembly → `action: assembly` · step 6 → `action: cut` with `keep` = `cuts.json` ·
+  step 7 → `action: dump` (Rough Cut) → `tight_plan.py` → `action: cut` with `keep` = `plan.json` → `action: markers`.
+  Each timeline is built with one `AppendToTimeline` call, so it is fast. Prove it the same way: `action: dump` on the new timeline,
+  then `verify_rebuild.py`. Status: written against Resolve 21's scripting API; not yet run end to end.
+
 ## Lessons that are now rules
 - **No Premiere project yet → create it.** The delivery is always a Premiere project with the three sequences.
 - **Phone clips are variable frame rate.** A sequence made from an iPhone clip can come out at an odd rate (28.14 fps): set the
