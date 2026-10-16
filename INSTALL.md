@@ -1,5 +1,7 @@
 # Install
 
+**[العربية](INSTALL.ar.md)**
+
 Works on macOS and Windows with Premiere Pro 2026 and Claude Code. Run on macOS (Apple Silicon); the Windows path below is written for it but has not yet been run on a Windows PC.
 
 ## 1. Tools
