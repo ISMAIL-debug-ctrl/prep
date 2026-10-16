@@ -1,0 +1,2 @@
+numpy
+mlx-whisper   # Apple Silicon. On other machines replace phrases.py's transcriber (see README)
