@@ -10,5 +10,5 @@ function add(tracks, k) { for (var t = 0; t < tracks.numTracks; t++) { var tr = 
   var en = 'true'; try { en = c.disabled ? 'false' : 'true'; } catch (e) {}
   o.push([k + (t + 1), c.name, c.start.ticks, c.end.ticks, c.inPoint.ticks, mp, en].join('|')); } } }
 add(S.videoTracks, 'V'); add(S.audioTracks, 'A');
-var f = new File(OUT); f.encoding = 'UTF-8'; f.open('w'); f.write(o.join('\n')); f.close();
+var f = new File(OUT); f.encoding = 'UTF-8'; f.lineFeed = 'Unix'; f.open('w'); f.write(o.join('\n')); f.close();
 return JSON.stringify({clips: o.length});

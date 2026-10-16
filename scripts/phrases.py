@@ -47,7 +47,8 @@ def find_phrases(x):
     hop = int(SR * STEP); n = len(x) // hop
     db = 10 * np.log10((x[:n * hop].reshape(n, hop) ** 2).mean(1) + 1e-12)
     level = float(np.percentile(db[db > db.max() - 60], 90))          # speech level
-    on = db > level - RANGE_DB
+    floor = float(np.percentile(db, 10))                              # room noise
+    on = db > max(level - RANGE_DB, floor + 8)                        # a noisy room (phone, fan) must not count as speech
     runs = []; s = None
     for i, v in enumerate(np.append(on, False)):
         if v and s is None: s = i

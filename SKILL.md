@@ -29,12 +29,23 @@ The Premiere half runs through the `premiere-pro` MCP server (see `INSTALL.md`).
 - The bridge gives up after 45 s while Premiere keeps working. Long jobs are done in batches that resume from where they stopped.
 - No Premiere project open = no panel loaded = no bridge. If the `Window > Extensions` menu is missing, `tools/open_bridge_panel.js`.
 
+## Lessons that are now rules
+- **No Premiere project yet → create it.** The delivery is always a Premiere project with the three sequences.
+- **Phone clips are variable frame rate.** A sequence made from an iPhone clip can come out at an odd rate (28.14 fps): set the
+  sequence to the clips' nominal rate (30 / 60) with `getSettings()` → `videoFrameRate` → `setSettings()` before placing anything, then read positions back.
+- **Clips shot one after another (one phone, no recorder):** no sync — lay them end to end in recording order (check `creation_time`).
+  The phone's own audio is the only audio: keep it enabled.
+- **Noisy room audio:** phrase detection uses `max(speech level − 30 dB, noise floor + 8 dB)`, so a fan or a phone mic does not glue everything into one phrase.
+- **Private screens:** when the footage shows an email address, an inbox, codes or any personal data, do not cut it if it is part of the
+  explanation — drop a marker on it in Rough Cut and Tight (name `PRIVATE - blur`, or the user's language) and list it in the report.
+- ExtendScript `File.write` ends lines with CR on macOS; Python's `splitlines()` reads it fine — set `f.lineFeed = 'Unix'` for clean files.
+
 ## Step 1 · Organise
 Inside the footage folder create `_work/`, `_assets/`, `exports/` (everything new goes there; originals stay put).
 `PY SK/scripts/probe.py <footage> <footage>/_work` → `roles.json` + a table. No picture = mic. Picture = camera or screen
 recording (a guess — confirm when unclear). Show the list.
 
-## Step 2 · Premiere project
+## Step 2 · Premiere project (always — create it if the folder has none)
 `create_project` (named after the video, saved in the footage folder) → bins `Footage` and `Sequences` → import every file into
 `Footage` → `createNewSequenceFromClips` from the main camera clip (takes its size and rate), named `<name> Assembly`, then emptied.
 
