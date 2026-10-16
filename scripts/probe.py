@@ -15,7 +15,7 @@ def main(folder, work):
     for root, _, names in os.walk(folder):
         for n in sorted(names):
             if n.startswith('.') or os.path.splitext(n)[1].lower() not in MEDIA: continue
-            p = os.path.join(root, n); info = ffprobe(p)
+            p = os.path.abspath(os.path.join(root, n)); info = ffprobe(p)
             v = next((s for s in info.get('streams', []) if s['codec_type'] == 'video'
                       and s.get('disposition', {}).get('attached_pic', 0) == 0), None)
             a = [s for s in info.get('streams', []) if s['codec_type'] == 'audio']

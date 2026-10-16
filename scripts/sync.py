@@ -23,11 +23,11 @@ def xcorr_lag(ref, x):
 def whiten(a):
     a = np.diff(a, prepend=a[:1]); return a / (a.std() + 1e-9)
 
-def local(main_path, path, t_in_x, coarse):
-    """Precise offset for a WIN-second window of x starting at t_in_x (seconds on x's own clock)."""
-    x = audio(path, HI, t_in_x, WIN); pad = 1.0
+def local(main_path, path, t_in_x, coarse, win=WIN):
+    """Precise offset for a win-second window of x starting at t_in_x (seconds on x's own clock)."""
+    x = audio(path, HI, t_in_x, win); pad = 1.0
     r0 = t_in_x + coarse - pad
-    r = audio(main_path, HI, r0, WIN + 2 * pad)
+    r = audio(main_path, HI, r0, win + 2 * pad)
     if len(x) < HI or len(r) < HI or r0 < 0: return None, 0.0
     lag, z = xcorr_lag(whiten(r), whiten(x))
     return r0 + lag / HI - t_in_x, z
@@ -39,18 +39,19 @@ def measure(ref, f, ref_lo=None):
     the sound's travel time, so 'steady' means the middle half of the windows agree within one video frame."""
     if ref_lo is None: ref_lo = whiten(audio(ref['path'], LO))
     lag, z = xcorr_lag(ref_lo, whiten(audio(f['path'], LO))); coarse = lag / LO
-    n = int(min(NWIN, max(3, f['dur'] // WIN))); pts = []
+    win = min(WIN, max(3.0, f['dur'] / 4))                   # short clips get shorter windows, so they still get several
+    n = int(min(NWIN, max(4, f['dur'] // win))); pts = []
     for k in range(n):
-        t = max(0.0, f['dur'] * (k + 0.5) / n - WIN / 2)
+        t = max(0.5, f['dur'] * (k + 0.5) / n - win / 2)        # skip the first half second (codec priming)
         if t + coarse < 1.0: t = 1.0 - coarse + 0.5            # stay inside the reference
-        if t + coarse + WIN > ref['dur'] - 1: t = ref['dur'] - 1 - WIN - coarse
-        if t < 0 or t + WIN > f['dur']: continue
-        o, zz = local(ref['path'], f['path'], t, coarse)
+        if t + coarse + win > ref['dur'] - 1: t = ref['dur'] - 1 - win - coarse
+        if t < 0 or t + win > f['dur']: continue
+        o, zz = local(ref['path'], f['path'], t, coarse, win)
         if o is not None: pts.append(dict(at=round(t, 2), offset=o, z=round(zz, 1)))
     loud = [q for q in pts if q['z'] > 8 and abs(q['offset'] - coarse) < 0.5]
     offs = sorted(q['offset'] for q in loud)
     if len(offs) >= 3:
-        spread = (offs[(3 * len(offs)) // 4] - offs[len(offs) // 4]) * 1000   # middle half
+        spread = float(np.percentile(offs, 75) - np.percentile(offs, 25)) * 1000   # middle half
         half = len(loud) // 2
         a, b = np.median([q['offset'] for q in loud[:half]]), np.median([q['offset'] for q in loud[-half:]])
         span = (np.mean([q['at'] for q in loud[-half:]]) - np.mean([q['at'] for q in loud[:half]])) / 60

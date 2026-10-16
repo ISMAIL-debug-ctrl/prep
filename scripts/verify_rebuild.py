@@ -7,10 +7,10 @@ Dumps are lines 'track|name|start|end|inPoint' (ticks) written by an ExtendScrip
 (source-sequence frames, in order). Prints missing, wrong and extra pieces per track.
 """
 import sys, json, collections
-src, dst, plan = sys.argv[1:4]; FR = int(json.load(open(plan)).get('ticks_per_frame', 4237833600))
+src, dst, plan = sys.argv[1:4]; FR = int(json.load(open(plan, encoding='utf-8')).get('ticks_per_frame', 4237833600))
 FIX = sys.argv[sys.argv.index('--fix') + 1] if '--fix' in sys.argv else None
 def rows(p): return [(l.split('|')[0], l.split('|')[1], *map(int, l.split('|')[2:5])) for l in open(p, encoding='utf-8').read().splitlines() if l]   # extra fields ignored
-S, D = rows(src), rows(dst); keep = json.load(open(plan))['keep']
+S, D = rows(src), rows(dst); keep = json.load(open(plan, encoding='utf-8'))['keep']
 exp = collections.defaultdict(list); pos = 0
 for a, b in keep:
     ks, ke = a * FR, b * FR
@@ -36,4 +36,4 @@ if FIX:                                                     # pieces that sit at
         for s, e, i, name in L:
             g = at.get((tr, s))
             if g and g != (e, i): fix.append([int(tr[1:]) - 1, str(s), str(i), str(i + e - s), str(e)])
-    json.dump(fix, open(FIX, 'w')); print(len(fix), 'pieces written to', FIX)
+    json.dump(fix, open(FIX, 'w', encoding='utf-8')); print(len(fix), 'pieces written to', FIX)

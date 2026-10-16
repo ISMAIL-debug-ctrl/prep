@@ -17,5 +17,5 @@ def audio(path, sr, start=None, dur=None):
     cmd += ['-vn', '-ac', '1', '-ar', str(sr), '-f', 'f32le', '-']
     return np.frombuffer(subprocess.run(cmd, capture_output=True).stdout, np.float32)
 
-def load(p): return json.load(open(p))
-def save(p, d): json.dump(d, open(p, 'w'), ensure_ascii=False, indent=1)
+def load(p): return json.load(open(p, encoding='utf-8'))
+def save(p, d): json.dump(d, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

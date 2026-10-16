@@ -5,7 +5,8 @@ description: Raw footage folder -> a Premiere Pro project ready to edit, with th
 
 # /prep — footage folder → Premiere project with Assembly, Rough Cut and Tight
 
-`SK` = this skill's folder. Run every Python script with a Python that has `requirements.txt` installed (`PY`).
+`SK` = this skill's folder. Run every Python script with a Python that has `requirements.txt` installed (`PY`) —
+`~/.prep-venv/bin/python` on macOS, `$HOME\.prep-venv\Scripts\python.exe` on Windows. Paths given to Premiere scripts use forward slashes.
 The Premiere half runs through the `premiere-pro` MCP server (see `INSTALL.md`).
 
 **Input:** the footage folder and the video's name. Ask only for those (and the spoken language if it is not obvious).
@@ -85,3 +86,6 @@ Rhythm only — silences out, content untouched. Built every time; the editor de
 ## Report
 Save the project. Then: where it is · the three sequence names and lengths · each rough-cut removal with the words that went
 and why · anything kept but doubtful · the Tight's silences removed and markers by kind.
+
+---
+By Ismail — [ISMAILX](https://ismailx.com). MIT licence.

@@ -29,7 +29,7 @@ def runs(b):
     d = np.diff(np.r_[0, b.astype(np.int8), 0]); return list(zip(np.where(d == 1)[0], np.where(d == -1)[0]))
 
 def main(lp, op):
-    L = json.load(open(lp)); fps = L['fps'][0] / L['fps'][1]; f0, f1 = L['from_frame'], L['end_frame']
+    L = json.load(open(lp, encoding='utf-8')); fps = L['fps'][0] / L['fps'][1]; f0, f1 = L['from_frame'], L['end_frame']
     T = int((f1 - f0) / fps * 100) + 1; dbs, own = [], []
     L['mics'] = [m for m in L['mics'] if any(min(e, f1) > max(s, f0) for s, e, _ in m['pieces'])]   # recorders inside the range only
     for m in L['mics']:
@@ -65,8 +65,8 @@ def main(lp, op):
         if e - s >= 3: cuts.append([s, e])
     removed = sum(e - s for s, e in cuts) / fps
     json.dump(dict(cuts=cuts, marks=marks, removed_s=round(removed, 1), mics=[{k: m[k] for k in ('path', 'floor', 'level', 'thr')} for m in L['mics']],
-                   params=dict(MIN_GAP=MIN_GAP, HEAD=HEAD, TAIL=TAIL, LONG_GAP=LONG_GAP)), open(op, 'w'), ensure_ascii=False, indent=1)
+                   params=dict(MIN_GAP=MIN_GAP, HEAD=HEAD, TAIL=TAIL, LONG_GAP=LONG_GAP)), open(op, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(f'{len(cuts)} cuts · {removed:.0f} s removed · {len(marks)} markers · long silences kept {kept_long:.0f} s')
-    for m in L['mics']: print('  ', m['path'].split('/')[-1], 'floor', m['floor'], 'speech', m['level'], 'threshold', m['thr'])
+    for m in L['mics']: print('  ', os.path.basename(m['path']), 'floor', m['floor'], 'speech', m['level'], 'threshold', m['thr'])
 if __name__ == '__main__': main(sys.argv[1], sys.argv[2])
 

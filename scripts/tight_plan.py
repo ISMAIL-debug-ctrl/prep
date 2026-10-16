@@ -28,15 +28,15 @@ def main():
     for r in rec: by[r[5]].append([int(round(int(r[2]) / fr)), int(round(int(r[3]) / fr)), float(int(r[4]) / fr)])
     layout = dict(fps=[fps.numerator, fps.denominator], from_frame=f0, end_frame=f1,
                   mics=[dict(path=p, pieces=sorted(v)) for p, v in by.items()])
-    json.dump(layout, open(os.path.join(out, 'layout.json'), 'w'), ensure_ascii=False, indent=1)
+    json.dump(layout, open(os.path.join(out, 'layout.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     tight.main(os.path.join(out, 'layout.json'), os.path.join(out, 'tight.json'))
-    T = json.load(open(os.path.join(out, 'tight.json'))); cuts = T['cuts']
+    T = json.load(open(os.path.join(out, 'tight.json'), encoding='utf-8')); cuts = T['cuts']
     keep, prev = [], 0
     for s, e in cuts: keep.append([prev, s]); prev = e
     keep.append([prev, f1]); keep = [k for k in keep if k[1] > k[0]]
     newpos = lambda f: f - sum(min(e, f) - s for s, e in cuts if s < f)
     marks = [dict(frame=newpos(m['frame']), why=m['why']) for m in T['marks']]
     total = sum(b - a for a, b in keep)
-    json.dump(dict(keep=keep, marks=marks, total=total, ticks_per_frame=str(int(fr))), open(os.path.join(out, 'plan.json'), 'w'), ensure_ascii=False)
+    json.dump(dict(keep=keep, marks=marks, total=total, ticks_per_frame=str(int(fr))), open(os.path.join(out, 'plan.json'), 'w', encoding='utf-8'), ensure_ascii=False)
     print(f'{f1} → {total} frames ({float(f1 / fps) / 60:.2f} → {float(total / fps) / 60:.2f} min) · {len(keep)} ranges · {len(marks)} markers')
 if __name__ == '__main__': main()

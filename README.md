@@ -1,6 +1,6 @@
 # /prep — raw footage to a Premiere project, ready to edit
 
-A Claude Code skill by **[ISMAILX](https://ismailx.com)**. Hand it a folder of raw footage and it builds a Premiere Pro project
+A Claude Code skill by **Ismail — [ISMAILX](https://ismailx.com)**. Hand it a folder of raw footage and it builds a Premiere Pro project
 with three sequences:
 
 | Sequence | What it is |
@@ -41,7 +41,7 @@ In Claude Code:
 The rough-cut approach follows the Editing Lair workflow (editinglair.com/roughcut).
 
 ## Limits
-- Built and tested on macOS / Apple Silicon / Premiere Pro 2026. Other systems need another Whisper (see INSTALL).
+- Runs on macOS and Windows. Proven on macOS / Apple Silicon / Premiere Pro 2026; the Windows path (faster-whisper, Windows temp folder) is written but not yet run on a Windows PC.
 - Building a long Tight in Premiere is slow (≈ 40 min for a 30-minute show) — it runs unattended, but it is not instant.
 - Transcripts of several people talking over each other are rough; they are used to find takes, not to quote.
 
