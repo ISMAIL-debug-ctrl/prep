@@ -17,7 +17,7 @@ right after several people sounded at once (laughter, a joke landing).
 import sys, json, subprocess, numpy as np
 SR, HOP = 16000, 160                     # 10 ms
 import os
-MIN_GAP, HEAD, TAIL, LONG_GAP = float(os.environ.get('TIGHT_MIN_GAP', 0.35)), 0.12, 0.10, 2.0
+MIN_GAP, HEAD, TAIL, LONG_GAP = float(os.environ.get('TIGHT_MIN_GAP', 0.6)), 0.25, 0.25, 2.0
 BELOW = float(os.environ.get('TIGHT_BELOW_DB', 18))   # sound = within this many dB of the recorder's speech level
 MIN_SOUND, FILL = 0.08, 0.12
 

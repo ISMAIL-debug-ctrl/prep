@@ -17,7 +17,15 @@ if (A0 >= P.keep.length) {                                     // finished: clea
   for (var t = 0; t < D.audioTracks.numTracks; t++) { var names = {}; var st = R.audioTracks[t];
     if (st) for (var k = 0; k < st.clips.numItems; k++) names[st.clips[k].name] = 1;
     var tr = D.audioTracks[t]; for (var k = tr.clips.numItems - 1; k >= 0; k--) { if (!names[tr.clips[k].name]) { tr.clips[k].remove(false, false); removed++; } } }
-  p.save(); return JSON.stringify({done: true, endFrames: cur / FR, strayAudioRemoved: removed});
+  // a camera file placed on an audio track also drops its picture on a new video track - remove
+  // video pieces on tracks that are empty in the source, and disable camera audio (non-recorder files) again
+  var strayVideo = 0;
+  for (var t = 0; t < D.videoTracks.numTracks; t++) { var sv = R.videoTracks[t]; if (sv && sv.clips.numItems) continue;
+    var tv = D.videoTracks[t]; for (var k = tv.clips.numItems - 1; k >= 0; k--) { tv.clips[k].remove(false, false); strayVideo++; } }
+  for (var t = 0; t < D.audioTracks.numTracks; t++) { var tr = D.audioTracks[t]; for (var k = 0; k < tr.clips.numItems; k++) {
+    var mp = ''; try { mp = String(tr.clips[k].projectItem.getMediaPath()).toLowerCase(); } catch (e) {}
+    if (mp && !/\.(wav|mp3|m4a|aif|aiff|flac)$/.test(mp)) tr.clips[k].disabled = true; } }
+  p.save(); return JSON.stringify({done: true, endFrames: cur / FR, strayAudioRemoved: removed, strayVideoRemoved: strayVideo});
 }
 var src = []; function grab(tracks, kind) { for (var t = 0; t < tracks.numTracks; t++) { var tr = tracks[t]; for (var k = 0; k < tr.clips.numItems; k++) { var c = tr.clips[k];
   src.push({kind: kind, t: t, item: c.projectItem, s: Number(c.start.ticks), e: Number(c.end.ticks), inp: Number(c.inPoint.ticks), name: c.name}); } } }

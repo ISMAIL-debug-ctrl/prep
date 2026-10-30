@@ -70,7 +70,7 @@ def main():
     if not src:                                                       # mic first, else the main camera
         mics = [c for c in clips if c['role'] == 'mic']
         src = (max(mics, key=lambda c: c['dur']) if mics else next(c for c in clips if c.get('main')))['path']
-    clip = next(c for c in clips if c['path'] == src); t0 = clip['timeline_start']
+    clip = next(c for c in clips if os.path.abspath(c['path']) == os.path.abspath(src)); t0 = clip['timeline_start']
     x = audio(src, SR); ph, level = find_phrases(x)
     transcribe, model = make_transcriber(backend, model, lang)
     whole = transcribe(x, words=True)

@@ -76,6 +76,9 @@ Tracks: one video track per camera; recorders on A1…An; each camera's own audi
 `PY SK/scripts/phrases.py <work> --lang <ar|en|…> [--source <file>]` → `phrases.json`, `phrases.txt`.
 Phrase times come from loudness, never from Whisper; each phrase is transcribed twice (whole file, then alone) because Whisper
 tidies retakes away on the whole file. Several speakers: mix the recorders as laid out on the timeline into one file and pass it with `--source`.
+**Transcribe once per project:** keep `phrases.json` and `phrases.txt` in `<footage folder>/_work/transcript/`; every later job on that project reads them.
+**Instructions said on set:** a spoken "cut" or "again" is not an order to cut. Drop a `DECIDE` marker there with what was said, and list it in the report.
+**One camera, several takes:** `C0001…C0004` from one camera are clips recorded one after another, not four cameras: check creation time and timecode. A recorder may keep rolling across takes, so sync per take block. A recorder clock can be years off: match by duration and audio, not file dates.
 
 ## Step 5 · Duplicate
 Duplicate the Assembly → `<name> Rough Cut`, in `Sequences`.
@@ -97,8 +100,8 @@ Rhythm only — silences out, content untouched. Built every time; the editor de
 1. Duplicate the **latest** Rough Cut (if the editor already worked on it, theirs) → `<name> Tight`, empty it.
 2. `premiere/dump_sequence.jsx` on the Rough Cut → `<work>/tight/rough_dump.txt`.
 3. `PY SK/scripts/tight_plan.py <work>/tight/rough_dump.txt <work>/tight [--from-frame F]` → `plan.json`.
-   Each recorder is measured on its own; a silence is when **everyone** is quiet; laughter counts as sound; silences of 0.35 s+
-   are cut with 0.12 s / 0.10 s of air; silences of 2 s+ and silences right after laughter are **left uncut and marked**.
+   Each recorder is measured on its own; a silence is when **everyone** is quiet; laughter counts as sound; silences of 0.6 s+
+   are cut with 0.25 s of air on both sides, so no cut clips a letter; silences of 2 s+ and silences right after laughter are **left uncut and marked**.
 4. `premiere/build_from_plan.jsx` — run it again and again until it answers `{done:true}`.
 5. `dump_sequence.jsx` on the Tight → `PY SK/scripts/verify_rebuild.py rough_dump.txt tight_dump.txt plan.json --fix fix.json`;
    if pieces are listed, `premiere/fix_pieces.jsx`, then dump and verify again until every track reads 0 / 0.
